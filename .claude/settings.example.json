@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "SessionEnd": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$(git rev-parse --show-toplevel)/.claude/scripts/cleanup-merged-worktrees.sh\" 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  }
+}
