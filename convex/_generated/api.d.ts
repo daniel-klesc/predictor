@@ -10,6 +10,7 @@
 
 import type * as auth from "../auth.js";
 import type * as bets from "../bets.js";
+import type * as chat from "../chat.js";
 import type * as crons from "../crons.js";
 import type * as http from "../http.js";
 import type * as lib_eloTsv from "../lib/eloTsv.js";
@@ -51,6 +52,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   bets: typeof bets;
+  chat: typeof chat;
   crons: typeof crons;
   http: typeof http;
   "lib/eloTsv": typeof lib_eloTsv;

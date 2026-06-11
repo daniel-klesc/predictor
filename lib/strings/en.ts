@@ -237,6 +237,22 @@ export const en = {
     settleNote:
       "1X2, O/U 2.5 and BTTS settle on the 90-minute result — knockout extra time and penalties don't count.",
   },
+  /** /api/chat responses + persisted error markers (chat backend issue #7). */
+  chatApi: {
+    unauthorized: "Unauthorized.",
+    invalidRequest: "Invalid request — expected a JSON body with a threadId.",
+    threadNotFound: "Thread not found.",
+    noUserMessage: "No pending user message — send one before streaming.",
+    notConfigured: "The chat backend is not configured on this server.",
+    streamFailed: "The chat stream failed unexpectedly. Please try again.",
+    modelRequestFailed: (status: string) => `Model request failed (${status}).`,
+    replyNotSaved:
+      "The reply finished but could not be saved to the thread history.",
+    pauseLimitMarker:
+      "Web search took too many rounds and was stopped — the answer may be incomplete.",
+    iterationLimitMarker:
+      "The assistant hit the per-turn tool budget and stopped.",
+  },
   // Tournament outrights view (issue #9) — appended at the end per the
   // parallel-agent file boundaries; base table strings live in `tournament`.
   outrights: {
