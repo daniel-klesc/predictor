@@ -1,0 +1,191 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================================
+ * Predictor design tokens — 3-layer system
+ *
+ * Layer 1: raw color scales as HSL triplets WITHOUT the hsl()
+ *          wrapper, so utilities can compose alpha:
+ *          hsl(var(--background) / 0.8)
+ * Layer 2: semantic tokens (dark is the default on :root;
+ *          `.light` overrides). AA contrast is checked at the
+ *          token level — light mode uses the darkened volt/teal
+ *          variants because volt-500 fails AA on light surfaces.
+ * Layer 3: Tailwind 4 `@theme inline` mapping semantic tokens to
+ *          utility classes (bg-background, text-primary, …).
+ *
+ * Rules: tokens-only styling (no raw hex/hsl in className), and
+ * minimum text size 12px (text-xs) — no micro type.
+ * ============================================================ */
+
+/* ---------- Layer 1 — raw scales ---------- */
+:root {
+  /* navy — surface scale (dark base → warm off-white) */
+  --navy-950: 220 25% 7%;
+  --navy-900: 220 22% 10%;
+  --navy-850: 220 20% 13%;
+  --navy-800: 219 18% 16%;
+  --navy-700: 218 15% 22%;
+  --navy-600: 217 12% 32%;
+  --navy-500: 216 10% 44%;
+  --navy-400: 215 9% 57%;
+  --navy-300: 213 8% 70%;
+  --navy-200: 210 6% 81%;
+  --navy-100: 45 8% 88%;
+  --navy-50: 45 10% 93%;
+  --white: 0 0% 100%;
+
+  /* volt — electric green, predictor's identity accent */
+  --volt-300: 80 95% 72%;
+  --volt-400: 80 95% 63%;
+  --volt-500: 80 95% 55%;
+  --volt-600: 78 80% 44%;
+  --volt-700: 76 70% 34%;
+
+  /* teal — secondary accent */
+  --teal-400: 174 58% 49%;
+  --teal-500: 174 60% 40%;
+  --teal-600: 174 62% 32%;
+
+  /* status */
+  --error-500: 4 80% 60%;
+  --error-600: 4 72% 45%;
+  --success-500: 142 60% 45%;
+  --success-600: 142 60% 30%;
+}
+
+/* ---------- Layer 2 — semantic tokens (dark = default) ---------- */
+:root {
+  --background: var(--navy-950);
+  --foreground: var(--navy-50);
+  --card: var(--navy-900);
+  --card-foreground: var(--navy-50);
+  --popover: var(--navy-850);
+  --popover-foreground: var(--navy-50);
+  --primary: var(--volt-500);
+  --primary-foreground: var(--navy-950);
+  --secondary: var(--teal-500);
+  --secondary-foreground: var(--navy-950);
+  --muted: var(--navy-800);
+  --muted-foreground: var(--navy-400);
+  --accent: var(--navy-800);
+  --accent-foreground: var(--navy-50);
+  --destructive: var(--error-500);
+  --border: var(--navy-800);
+  --input: var(--navy-700);
+  --ring: var(--volt-500);
+
+  /* prediction-domain tokens */
+  --value-strong: var(--volt-500);
+  --value-mild: var(--teal-500);
+  --edge-positive: var(--success-500);
+  --edge-negative: var(--error-500);
+}
+
+.light {
+  --background: var(--navy-50);
+  --foreground: var(--navy-950);
+  --card: var(--white);
+  --card-foreground: var(--navy-950);
+  --popover: var(--white);
+  --popover-foreground: var(--navy-950);
+  --primary: var(--volt-700);
+  --primary-foreground: var(--navy-950);
+  --secondary: var(--teal-600);
+  --secondary-foreground: var(--white);
+  --muted: var(--navy-100);
+  --muted-foreground: var(--navy-600);
+  --accent: var(--navy-100);
+  --accent-foreground: var(--navy-950);
+  --destructive: var(--error-600);
+  --border: var(--navy-200);
+  --input: var(--navy-300);
+  --ring: var(--volt-700);
+
+  --value-strong: var(--volt-700);
+  --value-mild: var(--teal-600);
+  --edge-positive: var(--success-600);
+  --edge-negative: var(--error-600);
+}
+
+/* ---------- Layer 3 — Tailwind theme mapping ---------- */
+@theme {
+  /* radii */
+  --radius-card: 12px;
+  --radius-tile: 10px;
+}
+
+@theme inline {
+  /* semantic colors */
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  /* prediction-domain colors */
+  --color-value-strong: hsl(var(--value-strong));
+  --color-value-mild: hsl(var(--value-mild));
+  --color-edge-positive: hsl(var(--edge-positive));
+  --color-edge-negative: hsl(var(--edge-negative));
+
+  /* fonts (variables provided by next/font in app/layout.tsx) */
+  --font-display: var(--font-barlow-condensed), "Arial Narrow", sans-serif;
+  --font-body: var(--font-source-sans-3), system-ui, sans-serif;
+  --font-sans: var(--font-source-sans-3), system-ui, sans-serif;
+  --font-heading: var(--font-barlow-condensed), "Arial Narrow", sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", "Segoe UI Mono", monospace;
+
+  /* radius scale used by shadcn/ui components */
+  --radius-sm: 8px;
+  --radius-md: var(--radius-tile);
+  --radius-lg: var(--radius-card);
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-3xl: 24px;
+  --radius-4xl: 28px;
+}
+
+/* ---------- base styles ---------- */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-body;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display;
+  }
+}
+
+/* ---------- utilities ---------- */
+@utility pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
