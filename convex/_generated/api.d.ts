@@ -9,7 +9,21 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as crons from "../crons.js";
 import type * as http from "../http.js";
+import type * as lib_eloTsv from "../lib/eloTsv.js";
+import type * as lib_footballDataApi from "../lib/footballDataApi.js";
+import type * as lib_openfootball from "../lib/openfootball.js";
+import type * as lib_resultsGuard from "../lib/resultsGuard.js";
+import type * as lib_teamNameMap from "../lib/teamNameMap.js";
+import type * as matches from "../matches.js";
+import type * as predictions from "../predictions.js";
+import type * as sync_audit from "../sync/audit.js";
+import type * as sync_elo from "../sync/elo.js";
+import type * as sync_footballData from "../sync/footballData.js";
+import type * as sync_seed from "../sync/seed.js";
+import type * as sync_util from "../sync/util.js";
+import type * as teams from "../teams.js";
 
 import type {
   ApiFromModules,
@@ -19,7 +33,21 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  crons: typeof crons;
   http: typeof http;
+  "lib/eloTsv": typeof lib_eloTsv;
+  "lib/footballDataApi": typeof lib_footballDataApi;
+  "lib/openfootball": typeof lib_openfootball;
+  "lib/resultsGuard": typeof lib_resultsGuard;
+  "lib/teamNameMap": typeof lib_teamNameMap;
+  matches: typeof matches;
+  predictions: typeof predictions;
+  "sync/audit": typeof sync_audit;
+  "sync/elo": typeof sync_elo;
+  "sync/footballData": typeof sync_footballData;
+  "sync/seed": typeof sync_seed;
+  "sync/util": typeof sync_util;
+  teams: typeof teams;
 }>;
 
 /**
