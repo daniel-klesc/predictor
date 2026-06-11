@@ -183,6 +183,31 @@ export const en = {
     loading: "Loading…",
     emDash: "—",
   },
+  // Tournament outrights view (issue #9) — appended at the end per the
+  // parallel-agent file boundaries; base table strings live in `tournament`.
+  outrights: {
+    noOddsHint:
+      "Outright prices appear once the Odds API key is configured — sim probabilities are already live.",
+    sortAriaLabel: "Sort tournament table",
+    sort: {
+      champion: "Champion %",
+      edge: "Edge",
+    },
+    detail: {
+      oddsLine: (odds: string, bookmaker: string, implied: string) =>
+        `Best ${odds} (${bookmaker}) · implied ${implied}`,
+      noPrice: "No outright price for this team yet.",
+    },
+    rounds: {
+      winGroup: "Win group",
+      r32: "R32",
+      r16: "R16",
+      qf: "QF",
+      sf: "SF",
+      final: "Final",
+      champion: "Champion",
+    },
+  },
 } as const;
 
 export type Strings = typeof en;
