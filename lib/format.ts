@@ -73,6 +73,19 @@ export function formatDayHeading(
   }).format(date);
 }
 
+/** Timestamp → "28 Jun" in the display timezone (bracket tiles). */
+export function formatShortDate(
+  date: Date | number,
+  timeZone: string = DISPLAY_TIME_ZONE,
+  locale = "en-GB",
+): string {
+  return new Intl.DateTimeFormat(locale, {
+    day: "numeric",
+    month: "short",
+    timeZone,
+  }).format(date);
+}
+
 /** 0.072 → "+7.2%" · −0.034 → "−3.4%" (signed percent, one decimal). */
 export function formatEdge(edge: number): string {
   const sign = edge < 0 ? "−" : "+";
