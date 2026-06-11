@@ -224,6 +224,65 @@ export const en = {
       champion: "Champion",
     },
   },
+  // Chat UI (issue #8) — appended at the end per the parallel-agent file
+  // boundaries; the streaming route's strings live in `chatApi` above.
+  chat: {
+    list: {
+      newChat: "New chat",
+      empty:
+        "No conversations yet — start with a question about today's matches or any value edge.",
+      untitled: "New chat",
+      matchThread: "Match thread",
+    },
+    suggestions: {
+      todayValue: "Today's value bets",
+      outrightValue: "Outright value",
+      bestTonight: "Best bet tonight",
+    },
+    thread: {
+      notFound: "Thread not found.",
+      back: "All chats",
+      loadEarlier: "Load earlier",
+      empty:
+        "Ask about any match, team, or edge — every number comes from the model.",
+      noReply: "The reply didn't arrive.",
+    },
+    composer: {
+      placeholder: "Ask about any match…",
+      send: "Send",
+    },
+    streaming: {
+      waiting: "Connecting…",
+      thinking: "Thinking…",
+      aria: "Assistant is replying",
+    },
+    tools: {
+      running: {
+        get_fixtures: "Checking fixtures…",
+        get_match_analysis: "Analyzing match…",
+        get_odds: "Checking odds…",
+        get_value_bets: "Scanning value bets…",
+        get_team_profile: "Loading team profile…",
+        get_tournament_sim: "Loading tournament sim…",
+        get_my_bets: "Checking your bets…",
+        propose_bet: "Recording proposal…",
+        web_search: "Searching the web…",
+      },
+      fallbackRunning: (name: string) => `Running ${name}…`,
+    },
+    proposedBet: {
+      tag: "Proposed",
+      viewInBets: "View in Bets",
+    },
+    errors: {
+      network:
+        "Could not reach the chat service. Check your connection and try again.",
+      connectionLost:
+        "The connection dropped mid-reply — whatever was saved stays in the thread.",
+      sendFailed: "Your message could not be sent. Try again.",
+      retry: "Retry",
+    },
+  },
 } as const;
 
 export type Strings = typeof en;
