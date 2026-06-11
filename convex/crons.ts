@@ -34,4 +34,19 @@ crons.daily(
   {},
 );
 
+/**
+ * Odds polling: ONE Odds API request covers all upcoming matches
+ * (h2h+totals × eu = 2 credits/run, ~8/day). Quota-guarded — hard-stops
+ * with zero API calls when remaining credits drop below 30.
+ */
+crons.interval("odds-sync", { hours: 6 }, internal.sync.oddsApi.oddsSync, {});
+
+/** Tournament-winner outright prices (1 credit/day). Quota-guarded. */
+crons.daily(
+  "outrights-sync",
+  { hourUTC: 4, minuteUTC: 15 },
+  internal.sync.oddsApi.outrightsSync,
+  {},
+);
+
 export default crons;
