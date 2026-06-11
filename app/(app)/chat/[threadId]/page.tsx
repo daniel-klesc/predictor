@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { Skeleton } from "@/components/ui/skeleton";
+import { ThreadView } from "@/components/chat/thread-view";
 import { en } from "@/lib/strings/en";
 
 export const metadata: Metadata = { title: en.screens.chatThread.title };
@@ -10,14 +10,9 @@ export default async function ChatThreadPage({
 }: {
   params: Promise<{ threadId: string }>;
 }) {
-  await params; // thread id consumed by the chat issue
-  return (
-    <div className="flex flex-col gap-3">
-      <p className="text-muted-foreground text-sm">
-        {en.screens.chatThread.empty}
-      </p>
-      <Skeleton className="rounded-card h-12 w-3/4" />
-      <Skeleton className="rounded-card h-12 w-2/3 self-end" />
-    </div>
-  );
+  const { threadId } = await params;
+  // Keyed remount per thread: switching /chat/[a] → /chat/[b] re-renders the
+  // same page component, and the key makes the previous view unmount (which
+  // aborts its in-flight stream) instead of leaking state across threads.
+  return <ThreadView key={threadId} threadId={threadId} />;
 }

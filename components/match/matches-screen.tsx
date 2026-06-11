@@ -5,24 +5,13 @@ import { useMemo, useState } from "react";
 
 import { api } from "@/convex/_generated/api";
 import { MatchCard, type MatchStage } from "@/components/match/match-card";
-import {
-  tierRowClasses,
-  tierTextClasses,
-} from "@/components/match/value-badge";
+import { OutrightsTable } from "@/components/match/outrights-table";
 import { Skeleton } from "@/components/ui/skeleton";
 import { dayKeyInZone, groupByDay } from "@/lib/day";
-import {
-  flagEmoji,
-  formatDayHeading,
-  formatDecimalOdds,
-  formatEdge,
-  formatKickoffTime,
-  formatPercent,
-} from "@/lib/format";
+import { flagEmoji, formatDayHeading } from "@/lib/format";
 import { groupStandings } from "@/lib/standings";
 import { en } from "@/lib/strings/en";
 import { cn } from "@/lib/utils";
-import { valueTier } from "@/lib/value-tier";
 
 type View = "schedule" | "tournament" | "groups";
 type StageFilter = "all" | "group" | "r32" | "r16" | "qf" | "sf" | "final";
@@ -99,7 +88,7 @@ export function MatchesScreen() {
         ))}
       </div>
       {view === "schedule" && <ScheduleView />}
-      {view === "tournament" && <TournamentView />}
+      {view === "tournament" && <OutrightsTable />}
       {view === "groups" && <GroupsView />}
     </div>
   );
@@ -163,109 +152,6 @@ function ScheduleView() {
           </section>
         ))
       )}
-    </>
-  );
-}
-
-const TOURNAMENT_GRID =
-  "grid grid-cols-[minmax(0,1fr)_4rem_3.25rem_3.5rem] items-center gap-x-1.5 px-3";
-
-function TournamentView() {
-  const sim = useQuery(api.sims.latest, {});
-  const outright = useQuery(api.odds.latestOutright, {});
-  const teams = useQuery(api.teams.list, {});
-
-  if (sim === undefined || teams === undefined || outright === undefined) {
-    return <Skeleton className="rounded-card h-96" />;
-  }
-  if (sim === null) {
-    return (
-      <p className="rounded-card border border-border bg-card px-4 py-6 text-center text-sm text-muted-foreground">
-        {en.tournament.empty}
-      </p>
-    );
-  }
-
-  const nameByCode = new Map(teams.map((team) => [team.code, team.name]));
-  const priceByCode = new Map(
-    (outright?.prices ?? []).map((price) => [price.teamCode, price]),
-  );
-  const valueByCode = new Map(
-    sim.valueOutrights.map((value) => [value.teamCode, value]),
-  );
-  const rows = [...sim.perTeam].sort((a, b) => b.pChampion - a.pChampion);
-
-  return (
-    <>
-      <p className="px-1 text-xs text-muted-foreground">
-        {en.tournament.meta(
-          sim.runs.toLocaleString("en-GB"),
-          formatKickoffTime(sim.computedAt),
-        )}
-        {" · "}
-        {outright ? en.tournament.oddsNote : en.tournament.noOddsNote}
-      </p>
-      <div className="rounded-card overflow-hidden border border-border bg-card">
-        <div
-          className={cn(
-            TOURNAMENT_GRID,
-            "font-display border-b border-border bg-muted/60 py-2 text-xs font-bold tracking-wider uppercase text-muted-foreground",
-          )}
-        >
-          <span>{en.tournament.header.team}</span>
-          <span className="text-right">{en.tournament.header.champion}</span>
-          <span className="text-right">{en.tournament.header.odds}</span>
-          <span className="text-right">{en.tournament.header.edge}</span>
-        </div>
-        {rows.map((row, index) => {
-          const price = priceByCode.get(row.teamCode);
-          const flagged = valueByCode.get(row.teamCode);
-          const edge =
-            flagged?.edge ??
-            (price ? row.pChampion - 1 / price.bestOdds : null);
-          const tier = flagged ? valueTier(flagged.edge) : null;
-          return (
-            <div
-              key={row.teamCode}
-              className={cn(
-                TOURNAMENT_GRID,
-                "py-2.5",
-                index < rows.length - 1 && "border-b border-border",
-                tier && tierRowClasses[tier],
-              )}
-            >
-              <span
-                className={cn(
-                  "truncate text-sm",
-                  tier ? "font-semibold" : "text-foreground/90",
-                )}
-              >
-                <span aria-hidden>{flagEmoji(row.teamCode)}</span>{" "}
-                {nameByCode.get(row.teamCode) ?? row.teamCode}
-              </span>
-              <span
-                className={cn(
-                  "font-display text-right text-[15px] font-bold tabular-nums",
-                  !tier && "text-muted-foreground",
-                )}
-              >
-                {formatPercent(row.pChampion, 1)}
-              </span>
-              <span className="font-display text-right text-sm tabular-nums text-muted-foreground">
-                {price ? formatDecimalOdds(price.bestOdds) : en.common.emDash}
-              </span>
-              <span
-                className={cn(
-                  "font-display text-right text-[15px] font-bold tabular-nums",
-                  tier ? tierTextClasses[tier] : "text-muted-foreground",
-                )}
-              >
-                {edge !== null ? formatEdge(edge) : en.common.emDash}
-              </span>
-            </div>
-          );
-        })}
-      </div>
     </>
   );
 }

@@ -1,9 +1,8 @@
 "use client";
 
-import { useMutation, useQuery } from "convex/react";
+import { useConvex, useMutation, useQuery } from "convex/react";
 import type { FunctionReturnType } from "convex/server";
 import { ChevronLeft, MessageCircle } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -68,6 +67,12 @@ export function MatchDetailScreen({ matchId }: { matchId: string }) {
   );
   const [pendingKey, setPendingKey] = useState<string | null>(null);
 
+  // "Discuss in chat" (chat UI issue #8): reuse the most recent thread for
+  // this match or create one carrying matchId — one tap lands in the thread.
+  const convex = useConvex();
+  const createThread = useMutation(api.chat.createThread);
+  const [chatPending, setChatPending] = useState(false);
+
   if (match === undefined) {
     return (
       <div className="flex flex-col gap-3">
@@ -92,6 +97,20 @@ export function MatchDetailScreen({ matchId }: { matchId: string }) {
       </div>
     );
   }
+
+  const onDiscussInChat = async () => {
+    if (chatPending) return;
+    setChatPending(true);
+    try {
+      const threads = await convex.query(api.chat.listThreads, {});
+      const existing = threads.find((thread) => thread.matchId === match._id);
+      const threadId =
+        existing?._id ?? (await createThread({ matchId: match._id }));
+      router.push(`/chat/${threadId}`);
+    } finally {
+      setChatPending(false);
+    }
+  };
 
   const onPropose = async (row: MarketRow) => {
     if (row.odds === null) return;
@@ -194,15 +213,14 @@ export function MatchDetailScreen({ matchId }: { matchId: string }) {
       )}
 
       <Button
-        asChild
         variant="outline"
         size="lg"
         className="rounded-card border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary font-display mt-2 w-full py-5 text-[15px] font-bold tracking-wider uppercase"
+        disabled={chatPending}
+        onClick={() => void onDiscussInChat()}
       >
-        <Link href="/chat">
-          <MessageCircle data-icon="inline-start" />
-          {en.screens.matchDetail.discussInChat}
-        </Link>
+        <MessageCircle data-icon="inline-start" />
+        {en.screens.matchDetail.discussInChat}
       </Button>
     </div>
   );

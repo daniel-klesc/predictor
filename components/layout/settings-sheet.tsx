@@ -1,9 +1,11 @@
 "use client";
 
 import { useAuthActions } from "@convex-dev/auth/react";
+import { useMutation, useQuery } from "convex/react";
 import { LogOut, RefreshCw, Settings } from "lucide-react";
 import { useRouter } from "next/navigation";
 
+import { api } from "@/convex/_generated/api";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,20 +21,24 @@ import {
 } from "@/components/ui/sheet";
 import { en } from "@/lib/strings/en";
 
-function StubField({
+function Field({
   label,
   hint,
+  comingSoon = false,
   children,
 }: {
   label: string;
   hint: string;
+  comingSoon?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <div className="flex flex-col gap-1.5">
       <div className="flex items-center justify-between gap-2">
         <span className="text-sm font-medium">{label}</span>
-        <Badge variant="secondary">{en.settings.comingSoon}</Badge>
+        {comingSoon && (
+          <Badge variant="secondary">{en.settings.comingSoon}</Badge>
+        )}
       </div>
       {children}
       <p className="text-muted-foreground text-xs">{hint}</p>
@@ -41,12 +47,44 @@ function StubField({
 }
 
 /**
- * Header gear → settings sheet. Bankroll / Kelly / refresh are stubs until
- * later issues wire them; sign-out is live.
+ * Header gear → settings sheet. Bankroll and Kelly multiplier persist to
+ * `userSettings` (committed on blur); the bankroll sizes suggested stakes
+ * on the Bets tab and the multiplier feeds the next predictions recompute.
+ * The inputs are uncontrolled, remounted (via key) once settings load;
+ * invalid entries snap back to the persisted value on blur. Refresh stays
+ * a stub until a later issue; sign-out is live.
  */
 export function SettingsSheet() {
   const { signOut } = useAuthActions();
   const router = useRouter();
+
+  const settings = useQuery(api.bets.getSettings);
+  const updateSettings = useMutation(api.bets.updateSettings);
+  const loaded = settings !== undefined && settings !== null;
+
+  const commitBankroll = (input: HTMLInputElement) => {
+    if (!loaded) return;
+    const raw = input.value.trim();
+    const parsed = Number(raw);
+    if (raw === "" || !Number.isFinite(parsed) || parsed < 0) {
+      input.value = settings.bankroll != null ? String(settings.bankroll) : "";
+      return;
+    }
+    if (parsed !== settings.bankroll) void updateSettings({ bankroll: parsed });
+  };
+
+  const commitKelly = (input: HTMLInputElement) => {
+    if (!loaded) return;
+    const raw = input.value.trim();
+    const parsed = Number(raw);
+    if (raw === "" || !Number.isFinite(parsed) || parsed <= 0 || parsed > 1) {
+      input.value = String(settings.kellyMultiplier);
+      return;
+    }
+    if (parsed !== settings.kellyMultiplier) {
+      void updateSettings({ kellyMultiplier: parsed });
+    }
+  };
 
   return (
     <Sheet>
@@ -61,32 +99,48 @@ export function SettingsSheet() {
           <SheetDescription>{en.settings.description}</SheetDescription>
         </SheetHeader>
         <div className="flex flex-col gap-6 px-4">
-          <StubField
+          <Field
             label={en.settings.bankrollLabel}
             hint={en.settings.bankrollHint}
           >
-            <Input type="number" inputMode="decimal" disabled placeholder="0" />
-          </StubField>
-          <StubField
-            label={en.settings.kellyLabel}
-            hint={en.settings.kellyHint}
-          >
             <Input
+              key={loaded ? "bankroll-ready" : "bankroll-loading"}
               type="number"
               inputMode="decimal"
-              disabled
-              placeholder="0.5"
+              min="0"
+              step="any"
+              placeholder="0"
+              disabled={!loaded}
+              defaultValue={
+                loaded && settings.bankroll != null ? settings.bankroll : ""
+              }
+              onBlur={(event) => commitBankroll(event.currentTarget)}
             />
-          </StubField>
-          <StubField
+          </Field>
+          <Field label={en.settings.kellyLabel} hint={en.settings.kellyHint}>
+            <Input
+              key={loaded ? "kelly-ready" : "kelly-loading"}
+              type="number"
+              inputMode="decimal"
+              min="0"
+              max="1"
+              step="any"
+              placeholder="0.25"
+              disabled={!loaded}
+              defaultValue={loaded ? settings.kellyMultiplier : ""}
+              onBlur={(event) => commitKelly(event.currentTarget)}
+            />
+          </Field>
+          <Field
             label={en.settings.refreshAction}
             hint={en.settings.refreshHint}
+            comingSoon
           >
             <Button variant="outline" disabled>
               <RefreshCw data-icon="inline-start" />
               {en.settings.refreshAction}
             </Button>
-          </StubField>
+          </Field>
         </div>
         <SheetFooter>
           <Separator />

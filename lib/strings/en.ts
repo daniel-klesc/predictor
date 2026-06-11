@@ -183,6 +183,160 @@ export const en = {
     loading: "Loading…",
     emDash: "—",
   },
+  // Bets screen (issue #6) — appended as one trailing section.
+  bets: {
+    roi: {
+      staked: "Staked",
+      returned: "Returned",
+      yield: "Yield",
+    },
+    sections: {
+      proposed: (count: number) => `Proposed · ${count}`,
+      placed: (count: number) => `Placed · ${count}`,
+      settled: "Settled",
+    },
+    empty: "No bets yet — add one from a match's markets or ask the chat.",
+    /** Bare grouped number → display amount, e.g. "2,400" → "2,400 Kč". */
+    amount: (formatted: string) => `${formatted} Kč`,
+    bttsNo: "BTTS no",
+    card: {
+      selectionAtOdds: (selection: string, odds: string) =>
+        `${selection} @ ${odds}`,
+      vs: (opponent: string) => `vs ${opponent}`,
+      edge: (edge: string) => `edge ${edge}`,
+      source: {
+        analysis: "from analysis",
+        chat: "from chat",
+        manual: "manual",
+      },
+      removeAria: (label: string) => `Dismiss ${label}`,
+      editStakeAria: (label: string) => `Edit stake for ${label}`,
+    },
+    place: "Place",
+    placeWith: (amount: string) => `Place · ${amount}`,
+    awaiting: "Awaiting",
+    pills: {
+      won: (net: string) => `Won ${net}`,
+      lost: (net: string) => `Lost ${net}`,
+      void: "Void",
+    },
+    dialog: {
+      placeTitle: "Place bet",
+      placeDescription:
+        "Record the stake you put on this bet on your betting platform.",
+      updateTitle: "Update stake",
+      updateDescription: "Adjust the recorded stake for this placed bet.",
+      stakeLabel: "Stake (Kč)",
+      suggested: (amount: string) =>
+        `Suggested ${amount} — fractional Kelly from your bankroll.`,
+      returns: (amount: string) => `Returns ${amount} if it wins.`,
+      confirmPlace: "Confirm placed",
+      confirmUpdate: "Save stake",
+      cancel: "Cancel",
+    },
+    settleNote:
+      "1X2, O/U 2.5 and BTTS settle on the 90-minute result — knockout extra time and penalties don't count.",
+  },
+  /** /api/chat responses + persisted error markers (chat backend issue #7). */
+  chatApi: {
+    unauthorized: "Unauthorized.",
+    invalidRequest: "Invalid request — expected a JSON body with a threadId.",
+    threadNotFound: "Thread not found.",
+    noUserMessage: "No pending user message — send one before streaming.",
+    notConfigured: "The chat backend is not configured on this server.",
+    streamFailed: "The chat stream failed unexpectedly. Please try again.",
+    modelRequestFailed: (status: string) => `Model request failed (${status}).`,
+    replyNotSaved:
+      "The reply finished but could not be saved to the thread history.",
+    pauseLimitMarker:
+      "Web search took too many rounds and was stopped — the answer may be incomplete.",
+    iterationLimitMarker:
+      "The assistant hit the per-turn tool budget and stopped.",
+  },
+  // Tournament outrights view (issue #9) — appended at the end per the
+  // parallel-agent file boundaries; base table strings live in `tournament`.
+  outrights: {
+    noOddsHint:
+      "Outright prices appear once the Odds API key is configured — sim probabilities are already live.",
+    sortAriaLabel: "Sort tournament table",
+    sort: {
+      champion: "Champion %",
+      edge: "Edge",
+    },
+    detail: {
+      oddsLine: (odds: string, bookmaker: string, implied: string) =>
+        `Best ${odds} (${bookmaker}) · implied ${implied}`,
+      noPrice: "No outright price for this team yet.",
+    },
+    rounds: {
+      winGroup: "Win group",
+      r32: "R32",
+      r16: "R16",
+      qf: "QF",
+      sf: "SF",
+      final: "Final",
+      champion: "Champion",
+    },
+  },
+  // Chat UI (issue #8) — appended at the end per the parallel-agent file
+  // boundaries; the streaming route's strings live in `chatApi` above.
+  chat: {
+    list: {
+      newChat: "New chat",
+      empty:
+        "No conversations yet — start with a question about today's matches or any value edge.",
+      untitled: "New chat",
+      matchThread: "Match thread",
+    },
+    suggestions: {
+      todayValue: "Today's value bets",
+      outrightValue: "Outright value",
+      bestTonight: "Best bet tonight",
+    },
+    thread: {
+      notFound: "Thread not found.",
+      back: "All chats",
+      loadEarlier: "Load earlier",
+      empty:
+        "Ask about any match, team, or edge — every number comes from the model.",
+      noReply: "The reply didn't arrive.",
+    },
+    composer: {
+      placeholder: "Ask about any match…",
+      send: "Send",
+    },
+    streaming: {
+      waiting: "Connecting…",
+      thinking: "Thinking…",
+      aria: "Assistant is replying",
+    },
+    tools: {
+      running: {
+        get_fixtures: "Checking fixtures…",
+        get_match_analysis: "Analyzing match…",
+        get_odds: "Checking odds…",
+        get_value_bets: "Scanning value bets…",
+        get_team_profile: "Loading team profile…",
+        get_tournament_sim: "Loading tournament sim…",
+        get_my_bets: "Checking your bets…",
+        propose_bet: "Recording proposal…",
+        web_search: "Searching the web…",
+      },
+      fallbackRunning: (name: string) => `Running ${name}…`,
+    },
+    proposedBet: {
+      tag: "Proposed",
+      viewInBets: "View in Bets",
+    },
+    errors: {
+      network:
+        "Could not reach the chat service. Check your connection and try again.",
+      connectionLost:
+        "The connection dropped mid-reply — whatever was saved stays in the thread.",
+      sendFailed: "Your message could not be sent. Try again.",
+      retry: "Retry",
+    },
+  },
 } as const;
 
 export type Strings = typeof en;
