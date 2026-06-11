@@ -64,3 +64,34 @@ coverage/
 # --- Developer-local (dev-standards-kit profile) ---
 .dsk-refs/
 CLAUDE.local.md
+
+# --- Next.js (merged from create-next-app; env rules stay in the
+#     standards-kit block above so !.env.example keeps working) ---
+
+# dependencies
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# next.js
+/.next/
+/out/
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# vercel
+.vercel
+
+# typescript
+next-env.d.ts
+
+# convex local state
+.convex/
