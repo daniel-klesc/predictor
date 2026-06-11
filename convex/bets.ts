@@ -9,7 +9,9 @@ import { mutation } from "./_generated/server";
 
 /**
  * One-tap propose from the analysis screens: inserts a `bets` doc with
- * status "proposed" and source "analysis" for the signed-in user.
+ * status "proposed" for the signed-in user. `source` defaults to "analysis";
+ * the chat backend's `propose_bet` tool passes "chat" (and an optional
+ * `note`) — appended as optional args so existing call sites are unchanged.
  */
 export const propose = mutation({
   args: {
@@ -18,6 +20,8 @@ export const propose = mutation({
     selection: v.string(),
     odds: v.number(),
     bookmaker: v.optional(v.string()),
+    note: v.optional(v.string()),
+    source: v.optional(v.union(v.literal("analysis"), v.literal("chat"))),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
@@ -31,8 +35,9 @@ export const propose = mutation({
       selection: args.selection,
       odds: args.odds,
       bookmaker: args.bookmaker,
+      note: args.note,
       status: "proposed",
-      source: "analysis",
+      source: args.source ?? "analysis",
     });
   },
 });
