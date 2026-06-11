@@ -15,3 +15,11 @@ export const byCode = query({
       .unique();
   },
 });
+
+/** All 48 qualified teams (Tournament + Groups views join on `code`). */
+export const list = query({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.db.query("teams").collect();
+  },
+});

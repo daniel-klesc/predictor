@@ -1,6 +1,7 @@
 /**
  * English UI strings. ALL user-facing text flows through this module
  * (future-translation-friendly) — never hardcode strings in components.
+ * Parametrized copy lives here too, as small template functions.
  */
 export const en = {
   app: {
@@ -19,15 +20,50 @@ export const en = {
   screens: {
     today: {
       title: "Today",
-      empty: "No matches today yet. Fixtures land with the schedule issue.",
+      empty: "No matches today.",
+      valuePill: (count: number) =>
+        count === 1 ? "1 value bet" : `${count} value bets`,
+      tomorrow: (count: number) =>
+        count === 1 ? "Tomorrow · 1 match" : `Tomorrow · ${count} matches`,
+      nextMatchday: (day: string) => `Next matchday · ${day}`,
+      refresh: "Refresh data",
     },
     matches: {
       title: "Matches",
-      empty: "The full match list arrives once the schedule is seeded.",
+      empty: "No matches found.",
+      emptyFilter: "No matches for this filter.",
+      views: {
+        schedule: "Schedule",
+        tournament: "Tournament",
+        groups: "Groups",
+      },
+      viewsAriaLabel: "Matches view",
+      stageFilterAriaLabel: "Stage filter",
+      stageFilters: {
+        all: "All",
+        group: "Groups",
+        r32: "R32",
+        r16: "R16",
+        qf: "QF",
+        sf: "SF",
+        final: "Final",
+      },
+      todayHeading: (day: string) => `Today · ${day}`,
+      tomorrowHeading: (day: string) => `Tomorrow · ${day}`,
     },
     matchDetail: {
       title: "Match",
-      empty: "Match detail coming soon.",
+      empty: "Match not found.",
+      back: "Back",
+      matchNumber: (n: number) => `#${n}`,
+      elo: (rating: number) => `Elo ${Math.round(rating)}`,
+      eloUnknown: "Elo —",
+      host: "host",
+      hostAdvantage: (bonus: number) => `host advantage +${bonus} Elo`,
+      noOddsNote: "No bookmaker odds yet — model probabilities only.",
+      noPrediction: "Prediction arrives once both teams are known.",
+      topScorelines: "Top scorelines",
+      discussInChat: "Discuss in chat",
     },
     chat: {
       title: "Chat",
@@ -40,6 +76,77 @@ export const en = {
     bets: {
       title: "Bets",
       empty: "Tracked bets and your P/L will appear here.",
+    },
+  },
+  match: {
+    vs: "VS",
+    live: "Live",
+    fullTime: "FT",
+    postponed: "Postponed",
+    cancelled: "Cancelled",
+    modelRow: "Model",
+    marketRow: "Market",
+    noOddsYet: "No odds yet",
+    fairNoEdge: "Fair — no edge",
+    bestOddsLabel: "best",
+    valueWord: "Value",
+    win: (team: string) => `${team} win`,
+    draw: "Draw",
+    over25: "Over 2.5 goals",
+    under25: "Under 2.5 goals",
+    bttsYes: "BTTS yes",
+    over25Short: "Over 2.5",
+    under25Short: "Under 2.5",
+  },
+  markets: {
+    header: {
+      market: "Market",
+      model: "Model",
+      odds: "Odds",
+      edge: "Edge",
+    },
+    addToSlip: "+ Slip",
+    added: "Added",
+    addToSlipAria: (selection: string) => `Add ${selection} to slip`,
+    noValue: "—",
+  },
+  stages: {
+    group: "Group",
+    r32: "Round of 32",
+    r16: "Round of 16",
+    qf: "Quarter-final",
+    sf: "Semi-final",
+    third: "Third place",
+    final: "Final",
+  },
+  placeholders: {
+    winner: (match: string) => `Winner match ${match}`,
+    loser: (match: string) => `Loser match ${match}`,
+    groupWinner: (group: string) => `Group ${group} winner`,
+    groupRunnerUp: (group: string) => `Group ${group} runner-up`,
+    bestThird: (groups: string) => `3rd of ${groups}`,
+    unknown: "TBD",
+  },
+  tournament: {
+    meta: (runs: string, time: string) =>
+      `${runs} simulations · updated ${time}`,
+    oddsNote: "outright odds EU best",
+    noOddsNote: "no outright odds yet",
+    header: {
+      team: "Team",
+      champion: "Champion",
+      odds: "Odds",
+      edge: "Edge",
+    },
+    empty: "No simulation yet — the table fills in after the first run.",
+  },
+  groups: {
+    title: (letter: string) => `Group ${letter}`,
+    header: {
+      team: "Team",
+      played: "P",
+      goalDiff: "GD",
+      points: "Pts",
     },
   },
   settings: {
@@ -74,6 +181,7 @@ export const en = {
   },
   common: {
     loading: "Loading…",
+    emDash: "—",
   },
 } as const;
 

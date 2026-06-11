@@ -9,6 +9,7 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as bets from "../bets.js";
 import type * as crons from "../crons.js";
 import type * as http from "../http.js";
 import type * as lib_eloTsv from "../lib/eloTsv.js";
@@ -30,6 +31,7 @@ import type * as lib_teamNameMap from "../lib/teamNameMap.js";
 import type * as matches from "../matches.js";
 import type * as odds from "../odds.js";
 import type * as predictions from "../predictions.js";
+import type * as sims from "../sims.js";
 import type * as sync_audit from "../sync/audit.js";
 import type * as sync_elo from "../sync/elo.js";
 import type * as sync_footballData from "../sync/footballData.js";
@@ -47,6 +49,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  bets: typeof bets;
   crons: typeof crons;
   http: typeof http;
   "lib/eloTsv": typeof lib_eloTsv;
@@ -68,6 +71,7 @@ declare const fullApi: ApiFromModules<{
   matches: typeof matches;
   odds: typeof odds;
   predictions: typeof predictions;
+  sims: typeof sims;
   "sync/audit": typeof sync_audit;
   "sync/elo": typeof sync_elo;
   "sync/footballData": typeof sync_footballData;
