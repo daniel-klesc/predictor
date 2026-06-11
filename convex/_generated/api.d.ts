@@ -27,6 +27,7 @@ import type * as lib_oddsApi from "../lib/oddsApi.js";
 import type * as lib_openfootball from "../lib/openfootball.js";
 import type * as lib_quota from "../lib/quota.js";
 import type * as lib_resultsGuard from "../lib/resultsGuard.js";
+import type * as lib_settle from "../lib/settle.js";
 import type * as lib_teamNameMap from "../lib/teamNameMap.js";
 import type * as matches from "../matches.js";
 import type * as odds from "../odds.js";
@@ -67,6 +68,7 @@ declare const fullApi: ApiFromModules<{
   "lib/openfootball": typeof lib_openfootball;
   "lib/quota": typeof lib_quota;
   "lib/resultsGuard": typeof lib_resultsGuard;
+  "lib/settle": typeof lib_settle;
   "lib/teamNameMap": typeof lib_teamNameMap;
   matches: typeof matches;
   odds: typeof odds;

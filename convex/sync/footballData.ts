@@ -232,6 +232,7 @@ export const applyFdUpdates = internalMutation({
     }
 
     const changedMatchIds: Id<"matches">[] = [];
+    const settleMatchIds: Id<"matches">[] = [];
     let unmatched = 0;
     for (const update of updates) {
       const match =
@@ -291,7 +292,26 @@ export const applyFdUpdates = internalMutation({
       if (Object.keys(patch).length > 0) {
         await ctx.db.patch(match._id, patch);
         changedMatchIds.push(match._id);
+
+        // Auto-settlement trigger: a transition into a final state — or a
+        // score change on an already-finished match (late score arrival) —
+        // schedules the (idempotent) bet-settlement pass for this match.
+        const enteredFinalState =
+          patch.status !== undefined &&
+          (update.status === "finished" ||
+            update.status === "postponed" ||
+            update.status === "cancelled");
+        const finishedScoreChanged =
+          update.status === "finished" && patch.score !== undefined;
+        if (enteredFinalState || finishedScoreChanged) {
+          settleMatchIds.push(match._id);
+        }
       }
+    }
+    for (const matchId of settleMatchIds) {
+      await ctx.scheduler.runAfter(0, internal.bets.settleForMatch, {
+        matchId,
+      });
     }
     return { changedMatchIds, unmatched };
   },
