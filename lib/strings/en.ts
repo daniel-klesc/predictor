@@ -183,6 +183,60 @@ export const en = {
     loading: "Loading…",
     emDash: "—",
   },
+  // Bets screen (issue #6) — appended as one trailing section.
+  bets: {
+    roi: {
+      staked: "Staked",
+      returned: "Returned",
+      yield: "Yield",
+    },
+    sections: {
+      proposed: (count: number) => `Proposed · ${count}`,
+      placed: (count: number) => `Placed · ${count}`,
+      settled: "Settled",
+    },
+    empty: "No bets yet — add one from a match's markets or ask the chat.",
+    /** Bare grouped number → display amount, e.g. "2,400" → "2,400 Kč". */
+    amount: (formatted: string) => `${formatted} Kč`,
+    bttsNo: "BTTS no",
+    card: {
+      selectionAtOdds: (selection: string, odds: string) =>
+        `${selection} @ ${odds}`,
+      vs: (opponent: string) => `vs ${opponent}`,
+      edge: (edge: string) => `edge ${edge}`,
+      source: {
+        analysis: "from analysis",
+        chat: "from chat",
+        manual: "manual",
+      },
+      removeAria: (label: string) => `Dismiss ${label}`,
+      editStakeAria: (label: string) => `Edit stake for ${label}`,
+    },
+    place: "Place",
+    placeWith: (amount: string) => `Place · ${amount}`,
+    awaiting: "Awaiting",
+    pills: {
+      won: (net: string) => `Won ${net}`,
+      lost: (net: string) => `Lost ${net}`,
+      void: "Void",
+    },
+    dialog: {
+      placeTitle: "Place bet",
+      placeDescription:
+        "Record the stake you put on this bet on your betting platform.",
+      updateTitle: "Update stake",
+      updateDescription: "Adjust the recorded stake for this placed bet.",
+      stakeLabel: "Stake (Kč)",
+      suggested: (amount: string) =>
+        `Suggested ${amount} — fractional Kelly from your bankroll.`,
+      returns: (amount: string) => `Returns ${amount} if it wins.`,
+      confirmPlace: "Confirm placed",
+      confirmUpdate: "Save stake",
+      cancel: "Cancel",
+    },
+    settleNote:
+      "1X2, O/U 2.5 and BTTS settle on the 90-minute result — knockout extra time and penalties don't count.",
+  },
   /** /api/chat responses + persisted error markers (chat backend issue #7). */
   chatApi: {
     unauthorized: "Unauthorized.",

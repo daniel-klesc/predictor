@@ -315,6 +315,10 @@ export default defineSchema({
     ),
     payout: v.optional(v.number()),
     note: v.optional(v.string()),
+    /** When the bet flipped proposed → placed (UTC ms). */
+    placedAt: v.optional(v.number()),
+    /** When auto-settlement resolved the bet (UTC ms). */
+    settledAt: v.optional(v.number()),
   })
     .index("by_user", ["userId", "status"])
     .index("by_match", ["matchId"]),
