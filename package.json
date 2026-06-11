@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "check": "eslint . && prettier --check .",
     "test": "vitest",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "icons": "node scripts/generate-icons.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.104.1",
@@ -37,6 +38,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
     "prettier": "^3.8.4",
+    "sharp": "^0.35.1",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.1.8"

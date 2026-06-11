@@ -357,6 +357,16 @@ export const en = {
     delta: (opening: string, current: string) => `${opening} → ${current}`,
     rowAria: (outcome: string) => `${outcome} implied probability over time`,
   },
+  pwa: {
+    offline: "You're offline — live data resumes when the connection returns.",
+    install: {
+      title: "Add Predictor to your home screen",
+      chromeBody: "Full-screen, one tap from your home screen, no browser bar.",
+      iosBody: "In Safari: tap Share, then “Add to Home Screen”.",
+      installAction: "Install",
+      dismissAriaLabel: "Dismiss install prompt",
+    },
+  },
 } as const;
 
 export type Strings = typeof en;

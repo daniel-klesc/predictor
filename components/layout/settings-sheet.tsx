@@ -93,7 +93,9 @@ export function SettingsSheet() {
           <Settings className="size-5" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="w-[320px]">
+      {/* pt/pb-safe: full-height sheet must clear the notch + home indicator
+          when the app runs standalone (viewport-fit=cover). */}
+      <SheetContent side="right" className="pt-safe pb-safe w-[320px]">
         <SheetHeader>
           <SheetTitle>{en.settings.title}</SheetTitle>
           <SheetDescription>{en.settings.description}</SheetDescription>
