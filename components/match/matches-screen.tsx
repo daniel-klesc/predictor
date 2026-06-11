@@ -4,6 +4,7 @@ import { useQuery } from "convex/react";
 import { useMemo, useState } from "react";
 
 import { api } from "@/convex/_generated/api";
+import { BracketView } from "@/components/match/bracket-view";
 import { MatchCard, type MatchStage } from "@/components/match/match-card";
 import { OutrightsTable } from "@/components/match/outrights-table";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -13,10 +14,17 @@ import { groupStandings } from "@/lib/standings";
 import { en } from "@/lib/strings/en";
 import { cn } from "@/lib/utils";
 
-type View = "schedule" | "tournament" | "groups";
+type View = "schedule" | "bracket" | "tournament" | "groups";
 type StageFilter = "all" | "group" | "r32" | "r16" | "qf" | "sf" | "final";
 
-const VIEWS: View[] = ["schedule", "tournament", "groups"];
+const VIEWS: View[] = ["schedule", "bracket", "tournament", "groups"];
+
+/** Chip labels (the bracket strings are appended at the end of `en`). */
+function viewLabel(view: View): string {
+  return view === "bracket"
+    ? en.bracket.viewLabel
+    : en.screens.matches.views[view];
+}
 const STAGE_FILTERS: StageFilter[] = [
   "all",
   "group",
@@ -75,7 +83,7 @@ export function MatchesScreen() {
       <div
         role="group"
         aria-label={en.screens.matches.viewsAriaLabel}
-        className="flex gap-2"
+        className="scrollbar-none -mx-4 flex gap-2 overflow-x-auto px-4"
       >
         {VIEWS.map((candidate) => (
           <Chip
@@ -83,11 +91,12 @@ export function MatchesScreen() {
             active={view === candidate}
             onClick={() => setView(candidate)}
           >
-            {en.screens.matches.views[candidate]}
+            {viewLabel(candidate)}
           </Chip>
         ))}
       </div>
       {view === "schedule" && <ScheduleView />}
+      {view === "bracket" && <BracketView />}
       {view === "tournament" && <OutrightsTable />}
       {view === "groups" && <GroupsView />}
     </div>

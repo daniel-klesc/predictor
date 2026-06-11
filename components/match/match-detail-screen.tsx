@@ -9,6 +9,7 @@ import { useState } from "react";
 import { api } from "@/convex/_generated/api";
 import { stageLabel } from "@/components/match/match-card";
 import { MarketsTable } from "@/components/match/markets-table";
+import { OddsSparkline } from "@/components/match/odds-sparkline";
 import { ScorelineChips } from "@/components/match/scoreline-chips";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -202,6 +203,13 @@ export function MatchDetailScreen({ matchId }: { matchId: string }) {
           {en.screens.matchDetail.noPrediction}
         </p>
       )}
+
+      {/* Odds movement — renders only once ≥2 snapshots exist. */}
+      <OddsSparkline
+        matchId={match._id}
+        homeLabel={match.home?.code}
+        awayLabel={match.away?.code}
+      />
 
       {match.prediction && (
         <>

@@ -233,6 +233,7 @@ export const applyFdUpdates = internalMutation({
 
     const changedMatchIds: Id<"matches">[] = [];
     const settleMatchIds: Id<"matches">[] = [];
+    let anyFinishedTransition = false;
     let unmatched = 0;
     for (const update of updates) {
       const match =
@@ -306,12 +307,24 @@ export const applyFdUpdates = internalMutation({
         if (enteredFinalState || finishedScoreChanged) {
           settleMatchIds.push(match._id);
         }
+        if (patch.status !== undefined && update.status === "finished") {
+          anyFinishedTransition = true;
+        }
       }
     }
     for (const matchId of settleMatchIds) {
       await ctx.scheduler.runAfter(0, internal.bets.settleForMatch, {
         matchId,
       });
+    }
+    // Outright probabilities depend on every finished result, so refresh
+    // the Monte-Carlo tournament sim after each result lands instead of
+    // waiting for the nightly Elo pass. Naturally debounced: scheduled
+    // ONCE per sync pass, and only on transitions INTO finished (the
+    // per-match prediction recompute is already handled by the caller via
+    // recomputeForMatches).
+    if (anyFinishedTransition) {
+      await ctx.scheduler.runAfter(0, internal.predictions.simulate, {});
     }
     return { changedMatchIds, unmatched };
   },

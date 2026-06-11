@@ -337,6 +337,26 @@ export const en = {
       retry: "Retry",
     },
   },
+  // Bracket view + odds-movement sparklines (issue #11) — appended at the
+  // end per the parallel-agent file boundaries.
+  bracket: {
+    viewLabel: "Bracket",
+    ariaLabel: "Knockout bracket",
+    empty: "The bracket appears once the knockout schedule is loaded.",
+    tileAria: (home: string, away: string) => `${home} vs ${away}`,
+  },
+  oddsHistory: {
+    heading: "Odds movement",
+    snapshots: (count: number) => `${count} snapshots`,
+    outcomes: {
+      home: "Home",
+      draw: "Draw",
+      away: "Away",
+    },
+    /** Opening → current implied probability, e.g. "44% → 47%". */
+    delta: (opening: string, current: string) => `${opening} → ${current}`,
+    rowAria: (outcome: string) => `${outcome} implied probability over time`,
+  },
   pwa: {
     offline: "You're offline — live data resumes when the connection returns.",
     install: {
