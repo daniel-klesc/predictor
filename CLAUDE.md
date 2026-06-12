@@ -51,7 +51,7 @@ npm run test:run  # vitest run
 ### Design-token rules (app/globals.css)
 
 - 3-layer system: **raw HSL triplets** (no `hsl()` wrapper, e.g. `--volt-500: 80 95% 55%`) → **semantic tokens** (`--background`, `--primary`, `--value-strong`, `--edge-positive`, …; dark is default on `:root`, light overrides on `.light`) → **`@theme inline`** mapping to utilities.
-- Style ONLY with token-driven Tailwind utilities — **no raw hex/hsl in `className`**, no parallel CSS class system.
+- Style ONLY with token-driven Tailwind utilities — **no raw hex/hsl in `className`**, no parallel CSS class system. Lint-enforced: raw hex / `hsl()` / `rgb()` in `className` (app/**, components/**) fails `npm run check` (selectors: `eslint-rules/design-tokens.mjs`).
 - **Minimum text size 12px** (`text-xs`) — never smaller.
 - Radii: `rounded-card` (12px) and `rounded-tile` (10px) for surfaces.
 - Fonts via next/font: `font-display` (Barlow Condensed — headings/numbers) and `font-body` (Source Sans 3); no CSS `@import` for fonts.

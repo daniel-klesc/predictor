@@ -36,6 +36,35 @@ export const latestForMatches = query({
   },
 });
 
+/**
+ * Full h2h price history for one match — one compact point per snapshot
+ * (median consensus line, falling back to best prices for old snapshots
+ * without a median). Ascending by fetchedAt (index order). Backs the
+ * odds-movement sparklines; snapshots without any h2h prices are skipped.
+ */
+export const historyForMatch = query({
+  args: { matchId: v.id("matches") },
+  handler: async (ctx, { matchId }) => {
+    const snapshots = await ctx.db
+      .query("oddsSnapshots")
+      .withIndex("by_match", (q) => q.eq("matchId", matchId))
+      .collect();
+    const points: Array<{
+      fetchedAt: number;
+      h2h: { home: number; draw: number; away: number };
+    }> = [];
+    for (const snapshot of snapshots) {
+      const h2h = snapshot.median?.h2h ?? snapshot.best?.h2h;
+      if (!h2h) continue;
+      points.push({
+        fetchedAt: snapshot.fetchedAt,
+        h2h: { home: h2h.home, draw: h2h.draw, away: h2h.away },
+      });
+    }
+    return points;
+  },
+});
+
 /** Latest tournament-winner outright snapshot (null until the first sync). */
 export const latestOutright = query({
   args: {},
